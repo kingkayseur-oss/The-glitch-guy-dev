@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MR KING KAYSEUR GLITCH GUY — BUG</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    color:#fff;
+    background:#050505;
+    overflow-x:hidden;
+}
+
+#bgVideo,#bgImage{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-4;
+}
+
+#bgImage{
+    display:none;
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.62);
+    z-index:-3;
+}
+
+.grid{
+    position:fixed;
+    inset:0;
+    background:
+      linear-gradient(rgba(0,255,180,.035) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(0,255,180,.035) 1px,transparent 1px);
+    background-size:35px 35px;
+    z-index:-2;
+    pointer-events:none;
+}
+
+header{
+    height:70px;
+    padding:0 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:rgba(0,0,0,.38);
+    border-bottom:1px solid rgba(0,255,180,.22);
+    backdrop-filter:blur(14px);
+    position:relative;
+    z-index:5;
+}
+
+.logo{
+    color:#00ffb3;
+    font-weight:bold;
+    letter-spacing:1.5px;
+    font-size:16px;
+}
+
+.menu{
+    width:45px;
+    height:42px;
+    border:1px solid #00ffb3;
+    border-radius:11px;
+    background:rgba(0,0,0,.4);
+    color:#00ffb3;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.container{
+    width:min(920px,92%);
+    margin:30px auto;
+}
+
+.hero{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.hero h1{
+    color:#00ffb3;
+    font-size:29px;
+    text-shadow:0 0 18px rgba(0,255,179,.45);
+}
+
+.hero p{
+    margin-top:8px;
+    color:#aaa;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:15px;
+}
+
+.card{
+    background:rgba(7,12,13,.47);
+    border:1px solid rgba(0,255,179,.22);
+    border-radius:18px;
+    padding:20px;
+    backdrop-filter:blur(15px);
+    box-shadow:0 12px 35px rgba(0,0,0,.28);
+}
+
+.card h3{
+    color:#00ffb3;
+    margin-bottom:14px;
+}
+
+.small{
+    color:#999;
+    font-size:12px;
+    line-height:1.5;
+    margin-top:8px;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    border-radius:10px;
+    border:1px solid rgba(0,255,179,.3);
+    outline:none;
+    background:rgba(0,0,0,.5);
+    color:#fff;
+}
+
+input[type="file"]{
+    padding:9px;
+}
+
+input[type="file"]::file-selector-button{
+    border:0;
+    padding:8px 10px;
+    margin-right:8px;
+    border-radius:8px;
+    background:#00ffb3;
+    color:#00150f;
+    cursor:pointer;
+}
+
+.mainButton{
+    width:100%;
+    margin-top:16px;
+    padding:15px;
+    border:0;
+    border-radius:11px;
+    background:#00ffb3;
+    color:#00150f;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.mainButton:hover{
+    transform:scale(1.02);
+}
+
+.status{
+    text-align:center;
+    padding:13px;
+    border-radius:10px;
+    color:#00ffb3;
+    background:rgba(0,255,179,.07);
+    border:1px solid rgba(0,255,179,.15);
+}
+
+.scoreBox{
+    text-align:center;
+}
+
+.circle{
+    width:150px;
+    height:150px;
+    margin:8px auto 14px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:
+      radial-gradient(circle,#07100e 57%,transparent 58%),
+      conic-gradient(
+        #00ffb3 var(--score),
+        rgba(255,255,255,.08) 0
+      );
+}
+
+.scoreNumber{
+    font-size:32px;
+    font-weight:bold;
+    color:#00ffb3;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.row:last-child{
+    border-bottom:0;
+}
+
+.signal{
+    margin-top:10px;
+}
+
+.signal label{
+    display:block;
+    color:#aaa;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+.settings{
+    position:fixed;
+    top:0;
+    right:-350px;
+    width:335px;
+    max-width:92%;
+    height:100vh;
+    padding:25px;
+    background:rgba(4,8,8,.94);
+    backdrop-filter:blur(20px);
+    border-left:1px solid rgba(0,255,179,.3);
+    z-index:20;
+    transition:.3s ease;
+    overflow-y:auto;
+}
+
+.settings.open{
+    right:0;
+}
+
+.settings h2{
+    color:#00ffb3;
+    margin-bottom:22px;
+}
+
+.close{
+    float:right;
+    border:0;
+    background:none;
+    color:#fff;
+    font-size:27px;
+    cursor:pointer;
+}
+
+.setting{
+    margin:20px 0;
+}
+
+.setting label{
+    display:block;
+    color:#aaa;
+    font-size:13px;
+    margin-bottom:6px;
+}
+
+.preview{
+    width:100%;
+    height:130px;
+    margin-top:10px;
+    border-radius:12px;
+    object-fit:cover;
+    display:none;
+    border:1px solid rgba(0,255,179,.2);
+}
+
+.musicName{
+    color:#00ffb3;
+    font-size:12px;
+    margin-top:8px;
+    word-break:break-word;
+}
+
+.musicButton{
+    width:100%;
+    margin-top:10px;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #00ffb3;
+    background:rgba(0,255,179,.08);
+    color:#00ffb3;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.report{
+    line-height:1.8;
+    font-size:13px;
+}
+
+footer{
+    text-align:center;
+    margin:35px 0 22px;
+    color:#777;
+    font-size:12px;
+}
+
+footer b{
+    color:#00ffb3;
+}
+
+#musicControl{
+    position:fixed;
+    bottom:18px;
+    left:18px;
+    z-index:15;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    border:1px solid #00ffb3;
+    background:rgba(0,0,0,.75);
+    color:#00ffb3;
+    font-size:20px;
+    cursor:pointer;
+}
+
+@media(max-width:500px){
+
+    .hero h1{
+        font-size:23px;
+    }
+
+    .container{
+        width:94%;
+    }
+
+    .card{
+        padding:17px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     MUSIQUE
+========================= -->
+
+<audio id="bgMusic" loop></audio>
+
+<button
+    id="musicControl"
+    onclick="toggleMusic()"
+    title="Musique">
+
+    🎵
+
+</button>
+
+
+<!-- =========================
+     VIDÉO
+========================= -->
+
+<video
+    id="bgVideo"
+    autoplay
+    muted
+    loop
+    playsinline>
+
+    <source
+        src="background.mp4"
+        type="video/mp4">
+
+</video>
+
+
+<!-- IMAGE -->
+
+<img
+    id="bgImage"
+    alt="Arrière-plan">
+
+
+<div class="overlay"></div>
+<div class="grid"></div>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div
+        class="logo"
+        id="siteName">
+
+        ⚡ MR KING KAYSEUR GLITCH GUY 🚀
+
+    </div>
+
+    <button
+        class="menu"
+        onclick="openSettings()">
+
+        ☰
+
+    </button>
+
+</header>
+
+
+<!-- =========================
+     CONTENU
+========================= -->
+
+<main class="container">
+
+<section class="hero">
+
+    <h1 id="title">
+
+        🌐 kayseur the best developer
+        in the history of the _bug_ purge 😈
+
+    </h1>
+
+    <p id="subtitle">
+
+        Centre de diagnostic et de sécurité
+        of the bot
+
+    </p>
+
+</section>
+
+
+<section class="dashboard">
+
+
+<!-- COMPTE -->
+
+<div class="card">
+
+    <h3>📱 MON COMPTE</h3>
+
+    <label>
+        Numéro du compte
+    </label>
+
+    <input
+        id="phone"
+        type="tel"
+        placeholder="+242 XX XX XX XX">
+
+    <button
+        class="mainButton"
+        onclick="debugAccount()">
+
+        🔧 BUGGER LE COMPTE ☠️
+
+    </button>
+
+    <p class="small">
+
+        Le numéro sert à identifier le rapport
+        et de vérifier si le compte est faible 👻
+
+    </p>
+
+</div>
+
+
+<!-- ÉTAT -->
+
+<div class="card">
+
+    <h3>🛡️ ÉTAT DU COMPTE</h3>
+
+    <div
+        class="status"
+        id="accountStatus">
+
+        EN ATTENTE
+
+    </div>
+
+    <p
+        class="small"
+        id="statusDescription">
+
+        Aucun diagnostic effectué.
+
+    </p>
+
+</div>
+
+
+<!-- SCORE -->
+
+<div class="card scoreBox">
+
+    <h3>📊 SCORE DE SÉCURITÉ</h3>
+
+    <div
+        class="circle"
+        id="scoreCircle"
+        style="--score:0%;">
+
+        <span
+            class="scoreNumber"
+            id="score">
+
+            0%
+
+        </span>
+
+    </div>
+
+    <p class="small">
+
+        Score indicatif calculé à partir
+        des informations déclarées.
+
+    </p>
+
+</div>
+
+
+<!-- HISTORIQUE -->
+
+<div class="card">
+
+    <h3>🚫 HISTORIQUE</h3>
+
+    <div class="row">
+
+        <span>
+            Restrictions déclarées
+        </span>
+
+        <strong id="banCount">
+            0
+        </strong>
+
+    </div>
+
+    <div class="row">
+
+        <span>
+            Dernière restriction
+        </span>
+
+        <strong id="lastBan">
+            Aucune
+        </strong>
+
+    </div>
+
+    <select id="previousBan">
+
+        <option value="0">
+            Jamais été banni/restricté
+        </option>
+
+        <option value="1">
+            Une restriction déjà rencontrée
+        </option>
+
+        <option value="2">
+            Plusieurs restrictions
+        </option>
+
+    </select>
+
+</div>
+
+
+<!-- SIGNAUX -->
+
+<div class="card">
+
+    <h3>🔎 SIGNAUX DU COMPTE</h3>
+
+
+    <div class="signal">
+
+        <label>
+            Activité de spam déclarée
+        </label>
+
+        <select id="spamLevel">
+
+            <option value="0">
+                Aucune
+            </option>
+
+            <option value="1">
+                Faible
+            </option>
+
+            <option value="2">
+                Modérée
+            </option>
+
+            <option value="3">
+                Élevée
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="signal">
+
+        <label>
+            Messages signalés déclarés
+        </label>
+
+        <select id="reportsLevel">
+
+            <option value="0">
+                Aucun
+            </option>
+
+            <option value="1">
+                Quelques-uns
+            </option>
+
+            <option value="2">
+                Plusieurs
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="signal">
+
+        <label>
+            Avertissement récent
+        </label>
+
+        <select id="warning">
+
+            <option value="0">
+                Non
+            </option>
+
+            <option value="1">
+                Oui
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <p class="small">
+
+        Ces signaux sont déclarés par l'utilisateur.
+        Ils proviennent de WhatsApp.
+
+    </p>
+
+</div>
+
+
+<!-- DIAGNOSTIC -->
+
+<div class="card">
+
+    <h3>🔬 DIAGNOSTIC</h3>
+
+    <div id="result">
+
+        Aucun diagnostic effectué.
+
+    </div>
+
+    <p class="small">
+
+        Le résultat est une estimation locale.
+        Il ne représente pas un compteur officiel
+        de bannissement WhatsApp.
+
+    </p>
+
+</div>
+
+
+<!-- RAPPORT -->
+
+<div class="card">
+
+    <h3>📋 RAPPORT</h3>
+
+    <div
+        class="report"
+        id="report">
+
+        Aucun rapport disponible.
+
+    </div>
+
+    <button
+        class="mainButton"
+        onclick="generateReport()">
+
+        📄 GÉNÉRER LE RAPPORT
+
+    </button>
+
+</div>
+
+
+</section>
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    Powered by
+    <b>
+        MR KING KAYSEUR THE GLITCH GUY © inc 2026
+    </b>
+
+</footer>
+
+
+<!-- =========================
+     PARAMÈTRES
+========================= -->
+
+<aside
+    class="settings"
+    id="settings">
+
+
+    <button
+        class="close"
+        onclick="closeSettings()">
+
+        ×
+
+    </button>
+
+
+    <h2>
+        ⚙️ PARAMÈTRES
+    </h2>
+
+
+    <!-- NOM -->
+
+    <div class="setting">
+
+        <label>
+            Nom du site
+        </label>
+
+        <input
+            id="newName"
+            type="text"
+            placeholder="MR KING KAYSEUR THE GLITCH GUY">
+
+    </div>
+
+
+    <!-- TITRE -->
+
+    <div class="setting">
+
+        <label>
+            Titre principal
+        </label>
+
+        <input
+            id="newTitle"
+            type="text"
+            placeholder="WHATSAPP ACCOUNT BUG">
+
+    </div>
+
+
+    <!-- SOUS TITRE -->
+
+    <div class="setting">
+
+        <label>
+            Sous-titre
+        </label>
+
+        <input
+            id="newSubtitle"
+            type="text"
+            placeholder="Centre de diagnostic">
+
+    </div>
+
+
+    <!-- IMAGE -->
+
+    <div class="setting">
+
+        <label>
+            🖼️ Photo d'arrière-plan
+        </label>
+
+        <input
+            type="file"
+            id="backgroundImageInput"
+            accept="image/*"
+            onchange="selectBackground(event)">
+
+        <img
+            id="preview"
+            class="preview"
+            alt="Aperçu">
+
+    </div>
+
+
+    <!-- MODE VIDEO / IMAGE -->
+
+    <div class="setting">
+
+        <label>
+            Arrière-plan vidéo
+        </label>
+
+        <select
+            id="videoMode"
+            onchange="changeVideoMode()">
+
+            <option value="video">
+                Vidéo
+            </option>
+
+            <option value="image">
+                Image
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- =========================
+         MUSIQUE
+    ========================= -->
+
+    <div class="setting">
+
+        <label>
+            🎵 Musique du site
+        </label>
+
+        <input
+            type="file"
+            id="musicInput"
+            accept="audio/*"
+            onchange="selectMusic(event)">
+
+        <div
+            class="musicName"
+            id="musicName">
+
+            Aucune musique sélectionnée.
+
+        </div>
+
+
+        <button
+            class="musicButton"
+            onclick="toggleMusic()"
+            id="musicSettingButton">
+
+            ▶️ LANCER LA MUSIQUE
+
+        </button>
+
+    </div>
+
+
+    <!-- VOLUME -->
+
+    <div class="setting">
+
+        <label>
+            🔊 Volume
+        </label>
+
+        <input
+            type="range"
+            id="musicVolume"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0.7"
+            oninput="changeVolume()">
+
+    </div>
+
+
+    <!-- SUPPRIMER MUSIQUE -->
+
+    <button
+        class="mainButton"
+        onclick="removeMusic()"
+        style="
+        background:#111;
+        color:#ff6b6b;
+        border:1px solid #ff6b6b;">
+
+        🗑️ SUPPRIMER LA MUSIQUE
+
+    </button>
+
+
+    <!-- ENREGISTRER -->
+
+    <button
+        class="mainButton"
+        onclick="applySettings()">
+
+        💾 ENREGISTRER
+
+    </button>
+
+
+    <!-- SUPPRIMER IMAGE -->
+
+    <button
+        class="mainButton"
+        onclick="removeBackground()"
+        style="
+        background:#111;
+        color:#ff6b6b;
+        border:1px solid #ff6b6b;">
+
+        🗑️ SUPPRIMER L'IMAGE
+
+    </button>
+
+
+    <p class="small">
+
+        Le pourcentage est calculé automatiquement
+        à partir des signaux renseignés.
+
+        <br><br>
+
+        Il s'agit d'une estimation locale et non
+        d'un score officiel de WhatsApp.
+
+    </p>
+
+</aside>
+
+
+<script>
+
+/* =========================
+   VARIABLES
+========================= */
+
+let currentScore = 0;
+let restrictionCount = 0;
+let currentPhone = "";
+
+const music =
+    document.getElementById("bgMusic");
+
+music.volume = 0.7;
+
+
+/* =========================
+   PARAMÈTRES
+========================= */
+
+function openSettings(){
+
+    document
+        .getElementById("settings")
+        .classList.add("open");
+
+}
+
+
+function closeSettings(){
+
+    document
+        .getElementById("settings")
+        .classList.remove("open");
+
+}
+
+
+/* =========================
+   MUSIQUE
+========================= */
+
+function selectMusic(event){
+
+    const file =
+        event.target.files[0];
+
+    if(!file){
+        return;
+    }
+
+
+    if(!file.type.startsWith("audio/")){
+
+        alert(
+            "Choisis un fichier audio."
+        );
+
+        return;
+
+    }
+
+
+    music.src =
+        URL.createObjectURL(file);
+
+    music.load();
+
+
+    document
+        .getElementById("musicName")
+        .textContent =
+        "🎵 " + file.name;
+
+
+    document
+        .getElementById("musicSettingButton")
+        .textContent =
+        "▶️ LANCER LA MUSIQUE";
+
+}
+
+
+function toggleMusic(){
+
+    if(!music.src){
+
+        alert(
+            "Choisis d'abord une musique dans les paramètres."
+        );
+
+        openSettings();
+
+        return;
+
+    }
+
+
+    if(music.paused){
+
+        music.play()
+
+        .then(function(){
+
+            document
+                .getElementById("musicControl")
+                .textContent =
+                "🔊";
+
+
+            document
+                .getElementById("musicSettingButton")
+                .textContent =
+                "⏸️ ARRÊTER LA MUSIQUE";
+
+        })
+
+        .catch(function(){
+
+            alert(
+                "Appuie encore une fois sur le bouton pour lancer la musique."
+            );
+
+        });
+
+    }
+
+    else{
+
+        music.pause();
+
+
+        document
+            .getElementById("musicControl")
+            .textContent =
+            "🎵";
+
+
+        document
+            .getElementById("musicSettingButton")
+            .textContent =
+            "▶️ LANCER LA MUSIQUE";
+
+    }
+
+}
+
+
+function changeVolume(){
+
+    const volume =
+        document
+        .getElementById("musicVolume")
+        .value;
+
+
+    music.volume =
+        Number(volume);
+
+
+    localStorage.setItem(
+        "musicVolume",
+        volume
+    );
+
+}
+
+
+function removeMusic(){
+
+    music.pause();
+
+    music.removeAttribute("src");
+
+    music.load();
+
+
+    document
+        .getElementById("musicInput")
+        .value = "";
+
+
+    document
+        .getElementById("musicName")
+        .textContent =
+        "Aucune musique sélectionnée.";
+
+
+    document
+        .getElementById("musicControl")
+        .textContent =
+        "🎵";
+
+
+    document
+        .getElementById("musicSettingButton")
+        .textContent =
+        "▶️ LANCER LA MUSIQUE";
+
+}
+
+
+/* =========================
+   ENREGISTRER
+========================= */
+
+function applySettings(){
+
+    const name =
+        document
+        .getElementById("newName")
+        .value
+        .trim();
+
+
+    const title =
+        document
+        .getElementById("newTitle")
+        .value
+        .trim();
+
+
+    const subtitle =
+        document
+        .getElementById("newSubtitle")
+        .value
+        .trim();
+
+
+    if(name){
+
+        document
+            .getElementById("siteName")
+            .textContent =
+            name;
+
+
+        localStorage.setItem(
+            "siteName",
+            name
+        );
+
+    }
+
+
+    if(title){
+
+        document
+            .getElementById("title")
+            .textContent =
+            title;
+
+
+        localStorage.setItem(
+            "siteTitle",
+            title
+        );
+
+    }
+
+
+    if(subtitle){
+
+        document
+            .getElementById("subtitle")
+            .textContent =
+            subtitle;
+
+
+        localStorage.setItem(
+            "siteSubtitle",
+            subtitle
+        );
+
+    }
+
+
+    closeSettings();
+
+}
+
+
+/* =========================
+   IMAGE
+========================= */
+
+function selectBackground(event){
+
+    const file =
+        event.target.files[0];
+
+
+    if(!file){
+        return;
+    }
+
+
+    if(!file.type.startsWith("image/")){
+
+        alert(
+            "Choisis une image."
+        );
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+    function(e){
+
+        const image =
+            document.getElementById(
+                "bgImage"
+            );
+
+
+        image.src =
+            e.target.result;
+
+        image.style.display =
+            "block";
+
+
+        document
+            .getElementById("bgVideo")
+            .style.display =
+            "none";
+
+
+        const preview =
+            document.getElementById(
+                "preview"
+            );
+
+
+        preview.src =
+            e.target.result;
+
+        preview.style.display =
+            "block";
+
+
+        try{
+
+            localStorage.setItem(
+                "customBackground",
+                e.target.result
+            );
+
+        }
+
+        catch(error){
+
+            console.log(
+                "Image trop grande pour localStorage."
+            );
+
+        }
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+/* =========================
+   SUPPRIMER IMAGE
+========================= */
+
+function removeBackground(){
+
+    localStorage.removeItem(
+        "customBackground"
+    );
+
+
+    const image =
+        document.getElementById(
+            "bgImage"
+        );
+
+
+    image.src = "";
+
+    image.style.dis
+    image.src =
+                savedBackground;
+
+
+            image.style.display =
+                "block";
+
+
+            document
+                .getElementById("bgVideo")
+                .style.display =
+                "none";
+
+
+            const preview =
+                document.getElementById(
+                    "preview"
+                );
+
+
+            preview.src =
+                savedBackground;
+
+
+            preview.style.display =
+                "block";
+
+
+            document
+            .getElementById("videoMode")
+                .value =
+                "image";
+
+        }
+
+
+        if(savedVolume !== null){
+
+            music.volume =
+                Number(savedVolume);
+
+
+            document
+                .getElementById(
+                    "musicVolume"
+                )
+                .value =
+                savedVolume;
+
+        }
+
+    }
+
+);
+
+</script>
+
+</body>
+</html>
